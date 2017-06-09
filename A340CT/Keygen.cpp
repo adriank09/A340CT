@@ -2,6 +2,8 @@
 #include <cstdio>
 #include <string>
 #include <cstdlib>
+#include <sstream>
+#include <iomanip>
 
 #include "cryptlib.h"
 #include "md5.h"
@@ -47,6 +49,15 @@ using CryptoPP::SecByteBlock;
 using CryptoPP::Salsa20;
 using CryptoPP::HexEncoder;
 using CryptoPP::HexDecoder;
+
+std::string hexStr(unsigned char* data, int len)
+{
+	std::stringstream ss;
+	ss << std::hex;
+	for (int i = 0; i<len; ++i)
+		ss << std::setw(2) << std::setfill('0') << (int)data[i];
+	return ss.str();
+}
 
 void Hash()
 {
@@ -220,22 +231,8 @@ void BlockCipher()
 	cout << std::endl << std::endl;
 }
 
-void Keygen()
+void Keygen(SecByteBlock key, byte* iv)
 {
-	AutoSeededRandomPool rnd;
-
-	// Generate a random key
-	SecByteBlock key(0x00, AES::DEFAULT_KEYLENGTH);
-	rnd.GenerateBlock(key, key.size());
-
-	// Generate a random IV
-	byte iv[AES::BLOCKSIZE];
-	rnd.GenerateBlock(iv, AES::BLOCKSIZE);
-
-	// Print the key and IV
-	cout << "Key: " << key << endl;
-	cout << "IV: " << iv << endl;
-
 	char plainText[] = "Hello! How are you.";
 	int messageLen = (int)strlen(plainText) + 1;
 
@@ -254,11 +251,29 @@ void Keygen()
 	cfbDecryption.ProcessData((byte*)plainText, (byte*)plainText, messageLen);
 
 	cout << "Decrypted plain text:" << plainText << endl;
+
+
 }
 
 int main()
 {
-	Keygen();
+	AutoSeededRandomPool rnd;
 	
+	// Generate a random key
+	SecByteBlock key(0x00, AES::DEFAULT_KEYLENGTH);
+	rnd.GenerateBlock(key, key.size());
+
+	// Generate a random IV
+	byte iv[AES::BLOCKSIZE];
+	rnd.GenerateBlock(iv, AES::BLOCKSIZE);
+
+	// Print the key and IV
+	cout << "Key: " << key << endl;
+	cout << "IV: " << iv << endl;
+	
+	Keygen(key,iv);
+	
+	// let user choose what to do here...
+
 	return 0;
 }
