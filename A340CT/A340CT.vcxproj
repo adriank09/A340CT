@@ -18,6 +18,159 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Hash.cpp" />
+    <ClCompile Include="Keygen.cpp" />
+    <ClCompile Include="MAC.cpp" />
+    <ClCompile Include="StreamCipher.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3way.h" />
+    <ClInclude Include="adler32.h" />
+    <ClInclude Include="aes.h" />
+    <ClInclude Include="algebra.h" />
+    <ClInclude Include="algparam.h" />
+    <ClInclude Include="arc4.h" />
+    <ClInclude Include="argnames.h" />
+    <ClInclude Include="asn.h" />
+    <ClInclude Include="authenc.h" />
+    <ClInclude Include="base32.h" />
+    <ClInclude Include="base64.h" />
+    <ClInclude Include="basecode.h" />
+    <ClInclude Include="bench.h" />
+    <ClInclude Include="blake2.h" />
+    <ClInclude Include="blowfish.h" />
+    <ClInclude Include="blumshub.h" />
+    <ClInclude Include="camellia.h" />
+    <ClInclude Include="cast.h" />
+    <ClInclude Include="cbcmac.h" />
+    <ClInclude Include="ccm.h" />
+    <ClInclude Include="chacha.h" />
+    <ClInclude Include="channels.h" />
+    <ClInclude Include="cmac.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="cpu.h" />
+    <ClInclude Include="crc.h" />
+    <ClInclude Include="cryptlib.h" />
+    <ClInclude Include="default.h" />
+    <ClInclude Include="des.h" />
+    <ClInclude Include="dh.h" />
+    <ClInclude Include="dh2.h" />
+    <ClInclude Include="dll.h" />
+    <ClInclude Include="dmac.h" />
+    <ClInclude Include="dsa.h" />
+    <ClInclude Include="eax.h" />
+    <ClInclude Include="ec2n.h" />
+    <ClInclude Include="eccrypto.h" />
+    <ClInclude Include="ecp.h" />
+    <ClInclude Include="elgamal.h" />
+    <ClInclude Include="emsa2.h" />
+    <ClInclude Include="eprecomp.h" />
+    <ClInclude Include="esign.h" />
+    <ClInclude Include="factory.h" />
+    <ClInclude Include="fhmqv.h" />
+    <ClInclude Include="files.h" />
+    <ClInclude Include="filters.h" />
+    <ClInclude Include="fips140.h" />
+    <ClInclude Include="fltrimpl.h" />
+    <ClInclude Include="gcm.h" />
+    <ClInclude Include="gf256.h" />
+    <ClInclude Include="gf2n.h" />
+    <ClInclude Include="gf2_32.h" />
+    <ClInclude Include="gfpcrypt.h" />
+    <ClInclude Include="gost.h" />
+    <ClInclude Include="gzip.h" />
+    <ClInclude Include="hex.h" />
+    <ClInclude Include="hkdf.h" />
+    <ClInclude Include="hmac.h" />
+    <ClInclude Include="hmqv.h" />
+    <ClInclude Include="hrtimer.h" />
+    <ClInclude Include="ida.h" />
+    <ClInclude Include="idea.h" />
+    <ClInclude Include="integer.h" />
+    <ClInclude Include="iterhash.h" />
+    <ClInclude Include="keccak.h" />
+    <ClInclude Include="lubyrack.h" />
+    <ClInclude Include="luc.h" />
+    <ClInclude Include="mars.h" />
+    <ClInclude Include="md2.h" />
+    <ClInclude Include="md4.h" />
+    <ClInclude Include="md5.h" />
+    <ClInclude Include="mdc.h" />
+    <ClInclude Include="mersenne.h" />
+    <ClInclude Include="misc.h" />
+    <ClInclude Include="modarith.h" />
+    <ClInclude Include="modes.h" />
+    <ClInclude Include="modexppc.h" />
+    <ClInclude Include="mqueue.h" />
+    <ClInclude Include="mqv.h" />
+    <ClInclude Include="nbtheory.h" />
+    <ClInclude Include="network.h" />
+    <ClInclude Include="nr.h" />
+    <ClInclude Include="oaep.h" />
+    <ClInclude Include="oids.h" />
+    <ClInclude Include="osrng.h" />
+    <ClInclude Include="ossig.h" />
+    <ClInclude Include="panama.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="pkcspad.h" />
+    <ClInclude Include="polynomi.h" />
+    <ClInclude Include="pssr.h" />
+    <ClInclude Include="pubkey.h" />
+    <ClInclude Include="pwdbased.h" />
+    <ClInclude Include="queue.h" />
+    <ClInclude Include="rabin.h" />
+    <ClInclude Include="randpool.h" />
+    <ClInclude Include="rc2.h" />
+    <ClInclude Include="rc5.h" />
+    <ClInclude Include="rc6.h" />
+    <ClInclude Include="rdrand.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="rijndael.h" />
+    <ClInclude Include="ripemd.h" />
+    <ClInclude Include="rng.h" />
+    <ClInclude Include="rsa.h" />
+    <ClInclude Include="rw.h" />
+    <ClInclude Include="safer.h" />
+    <ClInclude Include="salsa.h" />
+    <ClInclude Include="seal.h" />
+    <ClInclude Include="secblock.h" />
+    <ClInclude Include="seckey.h" />
+    <ClInclude Include="seed.h" />
+    <ClInclude Include="serpent.h" />
+    <ClInclude Include="serpentp.h" />
+    <ClInclude Include="sha.h" />
+    <ClInclude Include="sha3.h" />
+    <ClInclude Include="shacal2.h" />
+    <ClInclude Include="shark.h" />
+    <ClInclude Include="simple.h" />
+    <ClInclude Include="skipjack.h" />
+    <ClInclude Include="smartptr.h" />
+    <ClInclude Include="socketft.h" />
+    <ClInclude Include="sosemanuk.h" />
+    <ClInclude Include="square.h" />
+    <ClInclude Include="stdcpp.h" />
+    <ClInclude Include="strciphr.h" />
+    <ClInclude Include="tea.h" />
+    <ClInclude Include="tiger.h" />
+    <ClInclude Include="trap.h" />
+    <ClInclude Include="trdlocal.h" />
+    <ClInclude Include="trunhash.h" />
+    <ClInclude Include="ttmac.h" />
+    <ClInclude Include="twofish.h" />
+    <ClInclude Include="validate.h" />
+    <ClInclude Include="vmac.h" />
+    <ClInclude Include="wait.h" />
+    <ClInclude Include="wake.h" />
+    <ClInclude Include="whrlpool.h" />
+    <ClInclude Include="winpipes.h" />
+    <ClInclude Include="words.h" />
+    <ClInclude Include="xtr.h" />
+    <ClInclude Include="xtrcrypt.h" />
+    <ClInclude Include="zdeflate.h" />
+    <ClInclude Include="zinflate.h" />
+    <ClInclude Include="zlib.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{CDE83DFB-F2F0-4B71-84E0-EBF158B019D8}</ProjectGuid>
@@ -30,7 +183,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -43,7 +196,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -89,9 +242,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>C:\cryptopp565\Win32\Output\Debug\cryptlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -101,9 +258,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>C:\cryptopp565\Win32\Output\Debug\cryptlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,8 +299,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
