@@ -19,10 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Hash.cpp" />
     <ClCompile Include="Keygen.cpp" />
-    <ClCompile Include="MAC.cpp" />
-    <ClCompile Include="StreamCipher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3way.h" />

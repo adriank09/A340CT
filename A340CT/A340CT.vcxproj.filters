@@ -24,15 +24,6 @@
     <ClCompile Include="Keygen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MAC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StreamCipher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hash.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3way.h">
