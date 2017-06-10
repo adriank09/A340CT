@@ -304,6 +304,8 @@ int main()
 	iv = new byte[iv_length];
 	rnd.GenerateBlock(iv, iv_length);
 
+	cout << "Key and IV of specified length has been generated." << endl;
+
 	// let user choose what to do here...
 	// and allow the input of plaintext to be processed
 
