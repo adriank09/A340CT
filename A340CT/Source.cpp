@@ -50,16 +50,21 @@ using CryptoPP::Salsa20;
 using CryptoPP::HexEncoder;
 using CryptoPP::HexDecoder;
 
-void Hash()
+void Hash(char* text = "Hello world")
 {
 	 MD5 md5;
-
+	 
 	// print the digest for a binary file on disk.
 	// prints the MD5-ed text
-	puts(md5.digestFile("C://test//test.txt"));
+	 char* digested = md5.digestString(text);
+
+	 cout << "Original text: " << text << endl;
+	 cout << "Digested text: " << digested << endl;
+
+	//puts(md5.digestFile("C://test//test.txt"));
 }
 
-void MAC(byte* key, byte* iv, std::string plaintext= "Why hello there, I'm plaintext, what might you be?")
+void MAC(byte* key, byte* iv, std::string plaintext)
 {
 	string ciphertext("");
 	byte digestBytes[16];
@@ -97,7 +102,7 @@ void MAC(byte* key, byte* iv, std::string plaintext= "Why hello there, I'm plain
 
 }
 
-void StreamCipher(byte* key, byte* iv, std::string plainText= "My Plaintext!! My Dear plaintext!!")
+void StreamCipher(byte* key, byte* iv, std::string plainText)
 {
 	string ciphertextStr(""), plaintextStr(plainText);
 	byte *plaintextBytes = (byte *)plaintextStr.c_str();
@@ -129,7 +134,7 @@ void StreamCipher(byte* key, byte* iv, std::string plainText= "My Plaintext!! My
 	delete ciphertextBytes;
 }
 
-void BlockCipher(byte* key, byte* iv, std::string plain="Test")
+void BlockCipher(byte* key, byte* iv, std::string plain)
 {
 	//HMODULE DLL = LoadLibrary(_T("cryptopp.dll"));
 	//
@@ -237,6 +242,9 @@ int main()
 {
 	// Select key length
 	// Choice: AES::DEFAULT_KEYLENGTH, AES::MAX_KEYLENGTH, AES::MIN_KEYLENGTH, AES::KEYLENGTH_MULTIPLE
+	
+	Hash();
+	
 	int keylen, ivlen; // User input
 	byte *key, *iv; // ptr
 	AutoSeededRandomPool rnd; // rnd
@@ -299,17 +307,13 @@ int main()
 	iv = new byte[iv_length];
 	rnd.GenerateBlock(iv, iv_length);
 
-	byte scKey[AES::MAX_KEYLENGTH];
-	rnd.GenerateBlock(scKey, AES::MIN_KEYLENGTH);
-
-	byte scIV[AES::KEYLENGTH_MULTIPLE];
-	rnd.GenerateBlock(scIV, AES::KEYLENGTH_MULTIPLE);
-
 	// let user choose what to do here...
+	// and allow the input of plaintext to be processed
 
-	//MAC(key, iv); // success
-	StreamCipher(key, iv); // fail
-	//BlockCipher(key, iv); // success
+	// MAC(key, iv); // success
+	// StreamCipher(key, iv); // success
+	// BlockCipher(key, iv); // success
+	// Hash(); // success - but key and IV not needed.
 	
 
 	return 0;
