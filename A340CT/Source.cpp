@@ -50,15 +50,6 @@ using CryptoPP::Salsa20;
 using CryptoPP::HexEncoder;
 using CryptoPP::HexDecoder;
 
-std::string hexStr(unsigned char* data, int len)
-{
-	std::stringstream ss;
-	ss << std::hex;
-	for (int i = 0; i<len; ++i)
-		ss << std::setw(2) << std::setfill('0') << (int)data[i];
-	return ss.str();
-}
-
 void Hash()
 {
 	 MD5 md5;
@@ -68,30 +59,29 @@ void Hash()
 	puts(md5.digestFile("C://test//test.txt"));
 }
 
-void MAC()
+void MAC(byte* key, byte* iv, std::string plaintext= "Why hello there, I'm plaintext, what might you be?")
 {
 	string ciphertext("");
-	string plaintext("Why hello there, I'm plaintext, what might you be?");
 	byte digestBytes[16];
 	byte digestBytes2[16];
 	AutoSeededRandomPool prng;
 
-	SecByteBlock key(AES::BLOCKSIZE);
-	SecByteBlock iv(AES::BLOCKSIZE);
+	//SecByteBlock key(AES::BLOCKSIZE);
+	//SecByteBlock iv(AES::BLOCKSIZE);
 
-	prng.GenerateBlock(key, key.size());
-	prng.GenerateBlock(iv, iv.size());
+	prng.GenerateBlock(key, 16);
+	prng.GenerateBlock(iv, 16);
 
 	VMAC<AES> vmac;
 	cout << vmac.StaticAlgorithmName() << endl;
 	cout << "DIgest Size: " << vmac.DigestSize() << endl;
 
 	//VMAC Computation
-	vmac.SetKeyWithIV(key, key.size(), iv.BytePtr());
+	vmac.SetKeyWithIV(key, 16, iv);
 	vmac.CalculateDigest(digestBytes, (byte *)plaintext.c_str(), plaintext.length());
 
 	//VMAC Verification
-	vmac.SetKeyWithIV(key, key.size(), iv.BytePtr());
+	vmac.SetKeyWithIV(key, 16, iv);
 	vmac.CalculateDigest(digestBytes2, (byte *)plaintext.c_str(), plaintext.length());
 
 	for (int i = 0; i < 16; i++) {
@@ -107,19 +97,11 @@ void MAC()
 
 }
 
-void StreamCipher()
+void StreamCipher(byte* key, byte* iv, std::string plainText= "My Plaintext!! My Dear plaintext!!")
 {
-	AutoSeededRandomPool prng;
-
-	string ciphertextStr(""), plaintextStr("My Plaintext!! My Dear plaintext!!");
+	string ciphertextStr(""), plaintextStr(plainText);
 	byte *plaintextBytes = (byte *)plaintextStr.c_str();
 	byte *ciphertextBytes = new byte[plaintextStr.length()];
-
-	//Key and IV Generation/Initialization
-	byte key[32];
-	byte iv[8];
-	prng.GenerateBlock(key, 32);
-	prng.GenerateBlock(iv, 8);
 
 	//Encryption
 	Salsa20::Encryption salsa;
@@ -147,7 +129,7 @@ void StreamCipher()
 	delete ciphertextBytes;
 }
 
-void BlockCipher()
+void BlockCipher(byte* key, byte* iv, std::string plain="Test")
 {
 	//HMODULE DLL = LoadLibrary(_T("cryptopp.dll"));
 	//
@@ -155,11 +137,7 @@ void BlockCipher()
 	//AES encryption uses a secret key of a variable length (128-bit, 196-bit or 256-
 	//bit). This key is secretly exchanged between two parties before communication
 	//begins. DEFAULT_KEYLENGTH= 16 bytes
-	string key = "0123456789abcdef";
-	string iv = "aaaaaaaaaaaaaaaa";
-	string plain = "CBC Mode Test";
 	string cipher, encoded, recovered;
-
 
 	string plaintext;
 	string ciphertext;
@@ -170,8 +148,8 @@ void BlockCipher()
 	cout << plaintext;
 	cout << endl << endl;
 
-	CryptoPP::AES::Encryption aesEncryption((byte *)key.c_str(), CryptoPP::AES::DEFAULT_KEYLENGTH);
-	CryptoPP::CBC_Mode_ExternalCipher::Encryption cbcEncryption(aesEncryption, (byte *)iv.c_str());
+	CryptoPP::AES::Encryption aesEncryption(key, 16);
+	CryptoPP::CBC_Mode_ExternalCipher::Encryption cbcEncryption(aesEncryption, iv);
 
 	CryptoPP::StreamTransformationFilter stfEncryptor(cbcEncryption, new CryptoPP::StringSink(ciphertext));
 	stfEncryptor.Put(reinterpret_cast<const unsigned char*>(plaintext.c_str()), plaintext.length() + 1);
@@ -220,8 +198,8 @@ void BlockCipher()
 	\*********************************/
 
 
-	CryptoPP::AES::Decryption aesDecryption((byte *)key.c_str(), CryptoPP::AES::DEFAULT_KEYLENGTH);
-	CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption(aesDecryption, (byte *)iv.c_str());
+	CryptoPP::AES::Decryption aesDecryption(key, CryptoPP::AES::DEFAULT_KEYLENGTH);
+	CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption(aesDecryption, iv);
 
 	CryptoPP::StreamTransformationFilter stfDecryptor(cbcDecryption, new CryptoPP::StringSink(decryptedtext));
 	stfDecryptor.Put(reinterpret_cast<const unsigned char*>(result_string.c_str()), result_string.size());
@@ -257,6 +235,9 @@ void Keygen(SecByteBlock key, byte* iv)
 
 int main()
 {
+	// Select key length
+	// Choice: AES::DEFAULT_KEYLENGTH, AES::MAX_KEYLENGTH, AES::MIN_KEYLENGTH, AES::KEYLENGTH_MULTIPLE
+
 	AutoSeededRandomPool rnd;
 	
 	// Generate a random key
@@ -267,11 +248,15 @@ int main()
 	byte iv[AES::BLOCKSIZE];
 	rnd.GenerateBlock(iv, AES::BLOCKSIZE);
 
-	// Print the key and IV
-	cout << "Key: " << key << endl;
-	cout << "IV: " << iv << endl;
-	
-	Keygen(key,iv);
+	byte scKey[AES::MAX_KEYLENGTH];
+	rnd.GenerateBlock(scKey, AES::MAX_KEYLENGTH);
+
+	byte scIV[AES::KEYLENGTH_MULTIPLE];
+	rnd.GenerateBlock(scIV, AES::KEYLENGTH_MULTIPLE);
+
+	//MAC(key, iv); // success
+	//StreamCipher(scKey, scIV); // fail
+	BlockCipher(key, iv); // success
 	
 	// let user choose what to do here...
 
