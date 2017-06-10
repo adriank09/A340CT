@@ -64,29 +64,29 @@ void Hash(char* text = "Hello world")
 	//puts(md5.digestFile("C://test//test.txt"));
 }
 
-void MAC(byte* key, byte* iv, std::string plaintext)
+void MAC(byte* key, byte* iv, int key_length, int iv_length, std::string plaintext)
 {
 	string ciphertext("");
-	byte digestBytes[16];
-	byte digestBytes2[16];
+	byte* digestBytes = new byte[key_length];
+	byte* digestBytes2 = new byte[key_length];
 	AutoSeededRandomPool prng;
 
 	//SecByteBlock key(AES::BLOCKSIZE);
 	//SecByteBlock iv(AES::BLOCKSIZE);
 
-	prng.GenerateBlock(key, 16);
-	prng.GenerateBlock(iv, 16);
+	prng.GenerateBlock(key, key_length);
+	prng.GenerateBlock(iv, iv_length);
 
 	VMAC<AES> vmac;
 	cout << vmac.StaticAlgorithmName() << endl;
 	cout << "DIgest Size: " << vmac.DigestSize() << endl;
 
 	//VMAC Computation
-	vmac.SetKeyWithIV(key, 16, iv);
+	vmac.SetKeyWithIV(key, key_length, iv);
 	vmac.CalculateDigest(digestBytes, (byte *)plaintext.c_str(), plaintext.length());
 
 	//VMAC Verification
-	vmac.SetKeyWithIV(key, 16, iv);
+	vmac.SetKeyWithIV(key, key_length, iv);
 	vmac.CalculateDigest(digestBytes2, (byte *)plaintext.c_str(), plaintext.length());
 
 	for (int i = 0; i < 16; i++) {
@@ -102,7 +102,7 @@ void MAC(byte* key, byte* iv, std::string plaintext)
 
 }
 
-void StreamCipher(byte* key, byte* iv, std::string plainText)
+void StreamCipher(byte key[], byte iv[], int keylen, std::string plainText)
 {
 	string ciphertextStr(""), plaintextStr(plainText);
 	byte *plaintextBytes = (byte *)plaintextStr.c_str();
@@ -134,7 +134,7 @@ void StreamCipher(byte* key, byte* iv, std::string plainText)
 	delete ciphertextBytes;
 }
 
-void BlockCipher(byte* key, byte* iv, std::string plain)
+void BlockCipher(byte* key, byte* iv, int keylength, std::string plain)
 {
 	//HMODULE DLL = LoadLibrary(_T("cryptopp.dll"));
 	//
@@ -144,16 +144,15 @@ void BlockCipher(byte* key, byte* iv, std::string plain)
 	//begins. DEFAULT_KEYLENGTH= 16 bytes
 	string cipher, encoded, recovered;
 
-	string plaintext;
+	string plaintext = plain;
 	string ciphertext;
 	string decryptedtext;
-	cout << "Please enter plaintext: " << endl;
-	getline(cin, plaintext);
+
 	cout << endl << "Plain Text (" << plaintext.size() << " bytes)" << std::endl;
 	cout << plaintext;
 	cout << endl << endl;
 
-	CryptoPP::AES::Encryption aesEncryption(key, 16);
+	CryptoPP::AES::Encryption aesEncryption(key, keylength);
 	CryptoPP::CBC_Mode_ExternalCipher::Encryption cbcEncryption(aesEncryption, iv);
 
 	CryptoPP::StreamTransformationFilter stfEncryptor(cbcEncryption, new CryptoPP::StringSink(ciphertext));
@@ -203,7 +202,7 @@ void BlockCipher(byte* key, byte* iv, std::string plain)
 	\*********************************/
 
 
-	CryptoPP::AES::Decryption aesDecryption(key, CryptoPP::AES::DEFAULT_KEYLENGTH);
+	CryptoPP::AES::Decryption aesDecryption(key, keylength);
 	CryptoPP::CBC_Mode_ExternalCipher::Decryption cbcDecryption(aesDecryption, iv);
 
 	CryptoPP::StreamTransformationFilter stfDecryptor(cbcDecryption, new CryptoPP::StringSink(decryptedtext));
@@ -242,8 +241,6 @@ int main()
 {
 	// Select key length
 	// Choice: AES::DEFAULT_KEYLENGTH, AES::MAX_KEYLENGTH, AES::MIN_KEYLENGTH, AES::KEYLENGTH_MULTIPLE
-	
-	Hash();
 	
 	int keylen, ivlen; // User input
 	byte *key, *iv; // ptr
@@ -310,11 +307,10 @@ int main()
 	// let user choose what to do here...
 	// and allow the input of plaintext to be processed
 
-	// MAC(key, iv); // success
-	// StreamCipher(key, iv); // success
-	// BlockCipher(key, iv); // success
-	// Hash(); // success - but key and IV not needed.
-	
+	// MAC(key, iv, key_length, iv_length, "This is a plain text from MAC"); // success
+	// StreamCipher(key, iv, key_length,"Microsoft"); // fail
+	// BlockCipher(key, iv, key_length, "This is a plain text"); // success
+	// Hash("Test"); // success - but key and IV not needed.
 
 	return 0;
 }
