@@ -237,28 +237,80 @@ int main()
 {
 	// Select key length
 	// Choice: AES::DEFAULT_KEYLENGTH, AES::MAX_KEYLENGTH, AES::MIN_KEYLENGTH, AES::KEYLENGTH_MULTIPLE
+	int keylen, ivlen; // User input
+	byte *key, *iv; // ptr
+	AutoSeededRandomPool rnd; // rnd
 
-	AutoSeededRandomPool rnd;
+	cout << "Choose key length [1-Default length(16), 2-Minimum length(16), 3-Max length(32), 4-Multiple(8)]: ";
+	cin >> keylen;
+
+	if (keylen < 0 || keylen > 4) {
+		cerr << "Key length invalid. Exiting..." << endl;
+		return -1;
+	}
+
+	cout << "Choose IV length [1-Default length(16), 2-Minimum length(16), 3-Max length(32), 4-Multiple(8)]: ";
+	cin >> ivlen;
+
+	if (ivlen < 0 || ivlen > 4) {
+		cerr << "IV length invalid. Exiting..." << endl;
+		return -1;
+	}
+
+	int key_length=1, iv_length=1;
+	switch (keylen) {
+	case 1:
+		key_length = AES::DEFAULT_KEYLENGTH;
+		break;
+	case 2:
+		key_length = AES::MIN_KEYLENGTH;
+		break;
+	case 3:
+		key_length = AES::MAX_KEYLENGTH;
+		break;
+	case 4:
+		key_length = AES::KEYLENGTH_MULTIPLE;
+		break;
+	}
+
+	switch (ivlen) {
+	case 1:
+		iv_length = AES::DEFAULT_KEYLENGTH;
+		break;
+	case 2:
+		iv_length = AES::MIN_KEYLENGTH;
+		break;
+	case 3:
+		iv_length = AES::MAX_KEYLENGTH;
+		break;
+	case 4:
+		iv_length = AES::KEYLENGTH_MULTIPLE;
+		break;
+	}
+
+	// Flush the input
+	cin.ignore();
 	
 	// Generate a random key
-	SecByteBlock key(0x00, AES::DEFAULT_KEYLENGTH);
-	rnd.GenerateBlock(key, key.size());
+	key = new byte[key_length];
+	rnd.GenerateBlock(key, key_length);
 
 	// Generate a random IV
-	byte iv[AES::BLOCKSIZE];
-	rnd.GenerateBlock(iv, AES::BLOCKSIZE);
+	iv = new byte[iv_length];
+	rnd.GenerateBlock(iv, iv_length);
 
 	byte scKey[AES::MAX_KEYLENGTH];
-	rnd.GenerateBlock(scKey, AES::MAX_KEYLENGTH);
+	rnd.GenerateBlock(scKey, AES::MIN_KEYLENGTH);
 
 	byte scIV[AES::KEYLENGTH_MULTIPLE];
 	rnd.GenerateBlock(scIV, AES::KEYLENGTH_MULTIPLE);
 
-	//MAC(key, iv); // success
-	//StreamCipher(scKey, scIV); // fail
-	BlockCipher(key, iv); // success
-	
 	// let user choose what to do here...
+
+	//MAC(key, iv); // success
+	StreamCipher(key, iv); // fail
+	//BlockCipher(key, iv); // success
+	
 
 	return 0;
 }
