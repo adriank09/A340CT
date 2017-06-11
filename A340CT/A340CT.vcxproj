@@ -168,6 +168,9 @@
     <ClInclude Include="zinflate.h" />
     <ClInclude Include="zlib.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Text.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{CDE83DFB-F2F0-4B71-84E0-EBF158B019D8}</ProjectGuid>
