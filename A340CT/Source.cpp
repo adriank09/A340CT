@@ -309,7 +309,7 @@ int main()
 	// let user choose what to do here...
 	// and allow the input of plaintext to be processed
 
-	// MAC(key, iv, key_length, iv_length, "This is a plain text from MAC"); // success
+	//MAC(key, iv, key_length, iv_length, "This is plain text from MAC"); // success
 	// StreamCipher(key, iv, key_length,"Microsoft"); // fail
 	// BlockCipher(key, iv, key_length, "This is a plain text"); // success
 	// Hash("Test"); // success - but key and IV not needed.
