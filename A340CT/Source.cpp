@@ -1,5 +1,4 @@
 #include <iostream>
-#include <fstream>
 #include <cstdio>
 #include <string>
 #include <cstdlib>
@@ -20,7 +19,13 @@
 #include "modes.h"
 #include "des.h"
 
-using namespace std;
+using std::cout;
+using std::cerr;
+using std::string;
+using std::endl;
+using std::cin;
+using std::exit;
+using std::hex;
 
 using CryptoPP::AutoSeededRandomPool;
 using CryptoPP::Exception;
@@ -45,16 +50,18 @@ using CryptoPP::Salsa20;
 using CryptoPP::HexEncoder;
 using CryptoPP::HexDecoder;
 
-void Hash(string plaintext)
+void Hash(char* text = "Hello world")
 {
-	MD5 md5;
-
+	 MD5 md5;
+	 
+	// print the digest for a binary file on disk.
 	// prints the MD5-ed text
-	char* plain = new char[plaintext.length() + 1];
-	strcpy(plain, plaintext.c_str());
-	char* hash_value = md5.digestString(plain);
+	 char* digested = md5.digestString(text);
 
-	cout << "Hash value: " << hash_value << endl;
+	 cout << "Original text: " << text << endl;
+	 cout << "Digested text: " << digested << endl;
+
+	//puts(md5.digestFile("C://test//test.txt"));
 }
 
 void MAC(byte* key, byte* iv, int key_length, int iv_length, std::string plaintext)
@@ -63,6 +70,9 @@ void MAC(byte* key, byte* iv, int key_length, int iv_length, std::string plainte
 	byte* digestBytes = new byte[key_length];
 	byte* digestBytes2 = new byte[key_length];
 	AutoSeededRandomPool prng;
+
+	//SecByteBlock key(AES::BLOCKSIZE);
+	//SecByteBlock iv(AES::BLOCKSIZE);
 
 	prng.GenerateBlock(key, key_length);
 	prng.GenerateBlock(iv, iv_length);
@@ -203,11 +213,35 @@ void BlockCipher(byte* key, byte* iv, int keylength, std::string plain)
 	cout << std::endl << std::endl;
 }
 
+void Keygen(SecByteBlock key, byte* iv)
+{
+	char plainText[] = "Hello! How are you.";
+	int messageLen = (int)strlen(plainText) + 1;
+
+	//////////////////////////////////////////////////////////////////////////
+	// Encrypt
+
+	CFB_Mode<AES>::Encryption cfbEncryption(key, key.size(), iv);
+	cfbEncryption.ProcessData((byte*)plainText, (byte*)plainText, messageLen);
+
+	cout << "Encrypted plain text:" << plainText << endl;
+
+	//////////////////////////////////////////////////////////////////////////
+	// Decrypt
+
+	CFB_Mode<AES>::Decryption cfbDecryption(key, key.size(), iv);
+	cfbDecryption.ProcessData((byte*)plainText, (byte*)plainText, messageLen);
+
+	cout << "Decrypted plain text:" << plainText << endl;
+
+
+}
+
 int main()
 {
 	// Select key length
 	// Choice: AES::DEFAULT_KEYLENGTH, AES::MAX_KEYLENGTH, AES::MIN_KEYLENGTH, AES::KEYLENGTH_MULTIPLE
-
+	
 	int keylen, ivlen; // User input
 	byte *key, *iv; // ptr
 	AutoSeededRandomPool rnd; // rnd
@@ -228,7 +262,7 @@ int main()
 		return -1;
 	}
 
-	int key_length = 1, iv_length = 1;
+	int key_length=1, iv_length=1;
 	switch (keylen) {
 	case 1:
 		key_length = AES::DEFAULT_KEYLENGTH;
@@ -261,7 +295,7 @@ int main()
 
 	// Flush the input
 	cin.ignore();
-
+	
 	// Generate a random key
 	key = new byte[key_length];
 	rnd.GenerateBlock(key, key_length);
@@ -272,57 +306,13 @@ int main()
 
 	cout << "Key and IV of specified length has been generated." << endl;
 
-	ifstream myReadFile;
-	myReadFile.open("text.txt");
+	// let user choose what to do here...
+	// and allow the input of plaintext to be processed
 
-	string plaintext;
-	if (myReadFile.is_open()) {
-		while (!myReadFile.eof()) {
-			getline(myReadFile, plaintext);
-		}
-		myReadFile.close();
-	}
-	else {
-		cerr << "File 'text.txt' is not present! Exiting..." << endl;
-		return -1;
-	}
-
-
-	int choice = 0;
-	cout << "Select an encryption method as seen below:" << endl;
-	cout << "1. Hash Function" << endl;
-	cout << "2. VMAC" << endl;
-	cout << "3. Stream Cipher" << endl;
-	cout << "4. Block Cipher" << endl;
-	cout << "Enter choice: ";
-	cin >> choice;
-	do {
-		if (choice < 1 || choice > 4)
-		{
-			cout << "Invalid input. Please enter a valid choice:" << endl;
-			cin >> choice;
-		}
-	} while (choice < 1 || choice > 4);
-
-	// again, to flush the input
-	cin.ignore();
-
-	switch (choice) {
-	case 1:
-		Hash(plaintext);
-		break;
-	case 2:
-		MAC(key, iv, key_length, iv_length, plaintext);
-		break;
-	case 3:
-		StreamCipher(key, iv, key_length, plaintext);
-		break;
-	case 4:
-		BlockCipher(key, iv, key_length, plaintext);
-		break;
-	}
-
-	system("Pause");
+	// MAC(key, iv, key_length, iv_length, "This is a plain text from MAC"); // success
+	// StreamCipher(key, iv, key_length,"Microsoft"); // fail
+	// BlockCipher(key, iv, key_length, "This is a plain text"); // success
+	// Hash("Test"); // success - but key and IV not needed.
 
 	return 0;
 }
